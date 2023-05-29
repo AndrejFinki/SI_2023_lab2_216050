@@ -13,23 +13,23 @@ class SILab2Test {
     }
 
     @Test
-    void SimpleTest(){
+    void every_branch_test(){
 
-        User null_user = null;
-        List <User> user_list = createList();
+        /* Branch 1: Null User */
+        Exception exception = assertThrows( RuntimeException.class, () -> SILab2.function( null, createList() ) );
+        assertTrue( exception.getMessage().contains( "Mandatory information missing!" ) );
 
-        boolean caught_correct_exception = false;
-        String expected_message = "Mandatory information missing!";
+        /* Branch 2: User with null username, that exists in the user list */
+        assertFalse( SILab2.function( new User( null, "finki123", "andrej.shekerov@students.finki.ukim.mk" ), createList( new User( null, "finki123", "andrej.shekerov@students.finki.ukim.mk" ) ) ) );
 
-        try{
-            SILab2.function( null_user, user_list );
-        } catch ( RuntimeException x ){
-            if( x.getMessage().equals( expected_message ) ){
-                caught_correct_exception = true;
-            }
-        }
+        /* Branch 3: User with valid username that is contained in password, and invalid email */
+        assertFalse( SILab2.function( new User( "andrej", "andrej", "andrej" ), createList() ) );
 
-        assertTrue( caught_correct_exception );
+        /* Branch 4: User with a space in their password that doesn't match with at least one user in the user list */
+        assertFalse( SILab2.function( new User( "andrej", "finki password", "a@f.c" ) , createList( new User( "nikola", "python123", "n@f.c" ) ) ) );
+
+        /* Branch 5: User with a password with a special character */
+        assertTrue( SILab2.function( new User( "andrej", "finki123#", "a@f.c" ), createList() ) );
 
     }
 
