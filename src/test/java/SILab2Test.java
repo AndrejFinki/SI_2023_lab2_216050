@@ -33,4 +33,26 @@ class SILab2Test {
 
     }
 
+    @Test
+    void multiple_condition_test(){
+
+        /* if( user==null || user.getPassword()==null || user.getEmail()==null ) */
+
+        /* TXX */
+        Exception exception_1 = assertThrows( RuntimeException.class, () -> SILab2.function( null, createList() ) );
+        assertTrue( exception_1.getMessage().contains( "Mandatory information missing!" ) );
+
+        /* FTX */
+        Exception exception_2 = assertThrows( RuntimeException.class, () -> SILab2.function( new User( "andrej", null, null ), createList() ) );
+        assertTrue( exception_2.getMessage().contains( "Mandatory information missing!" ) );
+
+        /* FFT */
+        Exception exception_3 = assertThrows( RuntimeException.class, () -> SILab2.function( new User( "andrej", "pswd", null ), createList() ) );
+        assertTrue( exception_2.getMessage().contains( "Mandatory information missing!" ) );
+
+        /* FFF */
+        assertTrue( SILab2.function( new User( "andrej", "finki123#", "a@f.c" ), createList() ) );
+
+    }
+
 }
